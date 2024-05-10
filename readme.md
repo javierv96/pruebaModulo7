@@ -32,6 +32,18 @@ CREATE TABLE usuarios (id SERIAL PRIMARY KEY, nombre VARCHAR(50), balance FLOAT 
 
 CREATE TABLE transferencias (id SERIAL PRIMARY KEY, emisor INT, receptor INT, monto FLOAT, fecha TIMESTAMP, FOREIGN KEY (emisor) REFERENCES usuarios(id), FOREIGN KEY (receptor) REFERENCES usuarios(id));
 
+*COMENTARIO DEL CREADOR: Se realizaron cambios en la tabla transferencia con el fin de poder eliminar usuarios que ya tenian transferencias asociadas*
+
+CREATE TABLE transferencias (
+    id SERIAL PRIMARY KEY, 
+    emisor INT, 
+    receptor INT, 
+    monto FLOAT, 
+    fecha TIMESTAMP, 
+    FOREIGN KEY (emisor) REFERENCES usuarios(id) ON DELETE CASCADE, 
+    FOREIGN KEY (receptor) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 # Requerimientos
 1. Utilizar el paquete pg para conectarse a PostgreSQL y realizar consultas DML para la gestión y persistencia de datos. (3 Puntos)
 2. Usar transacciones SQL para realizar el registro de las transferencias. (2 Puntos)
