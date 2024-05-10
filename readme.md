@@ -32,7 +32,18 @@ CREATE TABLE usuarios (id SERIAL PRIMARY KEY, nombre VARCHAR(50), balance FLOAT 
 
 CREATE TABLE transferencias (id SERIAL PRIMARY KEY, emisor INT, receptor INT, monto FLOAT, fecha TIMESTAMP, FOREIGN KEY (emisor) REFERENCES usuarios(id), FOREIGN KEY (receptor) REFERENCES usuarios(id));
 
-*COMENTARIO DEL CREADOR: Se realizaron cambios en la tabla transferencia con el fin de poder eliminar usuarios que ya tenian transferencias asociadas*
+# *Comentarios del creador*
+# Solucion de eliminado por Cascada
+La idea de esta solucion planteada es realizar un delete en cascada cuando se elimina un usuario que cuenta con registros en 
+la tabla transferencias.
+Al ser eliminado de esta forma, tambien se eliminarian los registros asociados al usuario en la tabla transferencias, por lo que
+se plantea la solucion de mas abajo.
+
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50),
+    balance FLOAT CHECK (balance >= 0)
+);
 
 CREATE TABLE transferencias (
     id SERIAL PRIMARY KEY, 
@@ -43,6 +54,32 @@ CREATE TABLE transferencias (
     FOREIGN KEY (emisor) REFERENCES usuarios(id) ON DELETE CASCADE, 
     FOREIGN KEY (receptor) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+
+*Para utilizar esta solucion solo debera cambiar la estructura de la tabla como se muestra arriba y utilizar el archivo server.js*
+
+# Solucion de campo activo para cuenta
+Al implementar esta solucion, se agrega un nuevo campo al usuario con el nombre activo, el cual en la creacion del usuario por defecto estara como TRUE
+al momento de eliminar el usuario, si este cuenta con registros en la tabla transferencias, el usuario sera desactivado y no se mostrara mas en pantalla.
+en cambio si el usuario no cuenta con registros en la tabla transferencias, este si sera eliminado de la tabla usuarios.
+
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50),
+    balance FLOAT CHECK (balance >= 0),
+    activa BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE transferencias (
+    id SERIAL PRIMARY KEY, 
+    emisor INT, 
+    receptor INT, 
+    monto FLOAT, 
+    fecha TIMESTAMP, 
+    FOREIGN KEY (emisor) REFERENCES usuarios(id), 
+    FOREIGN KEY (receptor) REFERENCES usuarios(id)
+);
+
+*Para utilizar esta solucion solo debera cambiar la estructura de la tabla como se muestra arriba y utilizar el archivo server2.js*
 
 # Requerimientos
 1. Utilizar el paquete pg para conectarse a PostgreSQL y realizar consultas DML para la gestión y persistencia de datos. (3 Puntos)
