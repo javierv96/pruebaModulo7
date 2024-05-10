@@ -18,5 +18,5 @@ CREATE TABLE transferencias (
     monto FLOAT, 
     fecha TIMESTAMP, 
     FOREIGN KEY (emisor) REFERENCES usuarios(id) ON DELETE CASCADE, 
-    FOREIGN KEY (receptor) REFERENCES usuarios(id) ON DELETE CASCADE
+    FOREIGN KEY (receptor) REFERENCES usuarios(id) ON DELETE CASCADE
 );
