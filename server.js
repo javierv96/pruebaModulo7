@@ -152,6 +152,11 @@ app.post('/transferencia', async (req, res) => {
                 return res.status(400).json({ error: 'El valor ingresado no puede ser menor a cero.' });
             }
 
+            if(emisor == receptor) {
+                console.log("No puede realizar transferencia al mismo usuario.");
+                return res.status(400).json({ error: 'No puede realizar transferencia al mismo usuario.' });
+            }
+
             await querys.nuevaTransferencia(emisor, receptor, monto);
 
             res.status(201).json({
