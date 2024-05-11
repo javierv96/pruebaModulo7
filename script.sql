@@ -6,12 +6,13 @@ CREATE DATABASE bancosolar;
 
 drop table usuarios;
 
-
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(50),
     balance FLOAT CHECK (balance >= 0)
 );
+
+drop table transferencias;
 
 CREATE TABLE transferencias (
     id SERIAL PRIMARY KEY, 
@@ -22,6 +23,9 @@ CREATE TABLE transferencias (
     FOREIGN KEY (emisor) REFERENCES usuarios(id) ON DELETE CASCADE, 
     FOREIGN KEY (receptor) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+
+select * from usuarios;
+select * from transferencias;
 
 
 -- # Solucion de campo activo para cuenta (dejo esta solucion disponible para fines propios)
